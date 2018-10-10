@@ -11,7 +11,6 @@ var app = express();
 
 // Set up mongoose connection
 var mongoose = require("mongoose");
-
 var mongoDB = _config.dev_db_url;
 mongoose.connect(mongoDB);
 mongoose.Promise = global.Promise;

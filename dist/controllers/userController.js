@@ -1,6 +1,7 @@
 "use strict";
 
 var UserDetails = require("../models/user");
+var bcrypt = require("bcryptjs");
 
 //Simple version, without validation or sanitation
 exports.test = function (req, res) {
@@ -15,10 +16,16 @@ exports.user_create = function (req, res) {
     phone: req.body.phone,
     password: req.body.password
   });
-  user.save(function (err) {
-    if (err) {
-      res.send(err);
-    } else res.send("User Created successfully");
+  bcrypt.genSalt(10, function (err, salt) {
+    return bcrypt.hash(user.password, salt, function (err, hash) {
+      if (err) throw err;
+      user.password = hash;
+      user.save().then(function (user) {
+        return res.json(user);
+      }).catch(function (err) {
+        return console.log(err);
+      });
+    });
   });
 };
 
@@ -30,12 +37,24 @@ exports.get_user = function (req, res) {
 };
 
 exports.user_update = function (req, res) {
-  // console.log(req.params.id);
-  UserDetails.findByIdAndUpdate(req.params.id, { $set: req.body }, function (err, user) {
-    if (err) res.send(err); //return next(err);
-    res.send("User udpated.");
-  });
-  // res.send("Hello");
+  if (req.body.password) {
+    bcrypt.genSalt(10, function (err, salt) {
+      return bcrypt.hash(req.body.password, salt, function (err, hash) {
+        if (err) throw err;
+        var obj = req.body;
+        obj.password = hash;
+        UserDetails.findByIdAndUpdate(req.params.id, { $set: obj }, function (err, user) {
+          if (err) res.send(err);
+          res.send("User udpated.");
+        });
+      });
+    });
+  } else {
+    UserDetails.findByIdAndUpdate(req.params.id, { $set: obj }, function (err, user) {
+      if (err) res.send(err);
+      res.send("User udpated.");
+    });
+  }
 };
 
 exports.user_delete = function (req, res) {
