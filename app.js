@@ -22,7 +22,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   var url_parts = url.parse(req.url);
-  if (url_parts.pathname === "/user/login") {
+  if (
+    url_parts.pathname === "/user/login" ||
+    url_parts.pathname === "/user/create"
+  ) {
     return next();
   }
   res.header("Access-Control-Allow-Origin", "*");
@@ -72,5 +75,6 @@ app.listen(port, () => {
 //   message: in case of success true,
 //   success : true or false,
 //   body : data send from the frontend - revert it back,
-//   error : in case of success false
+//   error : in case of success false,
+//   token : only in case of login
 // });

@@ -16,7 +16,8 @@ exports.user_create = function(req, res) {
     email: req.body.email,
     dob: req.body.dob,
     phone: req.body.phone,
-    password: req.body.password
+    password: req.body.password,
+    address: req.body.address
   });
   bcrypt.genSalt(10, (err, salt) =>
     bcrypt.hash(user.password, salt, (err, hash) => {
@@ -85,6 +86,12 @@ export let login = (req, res) => {
   UserDetails.findOne({ email: email }, (err, user) => {
     if (err) res.json({ text: "user not found", err });
     else {
+      if (user === null) {
+        return res.status(400).json({
+          success: false,
+          error: "Invalid username or password"
+        });
+      }
       bcrypt.compare(password, user.password, function(err, result) {
         console.log(result);
         if (result == true) {
@@ -98,15 +105,16 @@ export let login = (req, res) => {
             key,
             { expiresIn: timeToExpireToken },
             (err, token) => {
-              res.status(200).json({
+              return res.status(200).json({
                 success: true,
                 token: "Bearer " + token
               });
             }
           );
         } else {
-          res.status(400).json({
-            text: "Invalid username or password"
+          return res.status(400).json({
+            success: false,
+            error: "Invalid username or password"
           });
         }
       });
