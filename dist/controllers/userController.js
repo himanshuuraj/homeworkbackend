@@ -1,11 +1,21 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.login = undefined;
+
+var _config = require("./../config/config");
+
 var UserDetails = require("../models/user");
 var bcrypt = require("bcryptjs");
 
+var jwt = require("jsonwebtoken");
+
 //Simple version, without validation or sanitation
 exports.test = function (req, res) {
-  res.send("Greetings from the Test controller!");
+  //res.send("Greetings from the Test controller!");
+  res.status(404).json({ text: "Not found" });
 };
 
 exports.user_create = function (req, res) {
@@ -31,7 +41,7 @@ exports.user_create = function (req, res) {
 
 exports.get_user = function (req, res) {
   UserDetails.findById(req.params.id, function (err, user) {
-    if (err) return next(err);
+    if (err) return res.json(err); //next(err);
     res.send(user);
   });
 };
@@ -61,5 +71,42 @@ exports.user_delete = function (req, res) {
   UserDetails.findByIdAndRemove(req.params.id, function (err) {
     if (err) return next(err);
     res.send("Deleted successfully!");
+  });
+};
+
+var login = exports.login = function login(req, res) {
+  var email = req.query.email;
+  var password = req.query.password;
+  if (!email) {
+    res.json({ text: "Please insert email" });
+    return;
+  }
+  if (!password) {
+    res.json({ text: "Please insert password" });
+    return;
+  }
+  UserDetails.findOne({ email: email }, function (err, user) {
+    if (err) res.json({ text: "user not found", err: err });else {
+      bcrypt.compare(password, user.password, function (err, result) {
+        console.log(result);
+        if (result == true) {
+          var payload = {
+            email: user.email,
+            name: user.name,
+            phone: user.phone
+          };
+          jwt.sign(payload, _config.key, { expiresIn: _config.timeToExpireToken }, function (err, token) {
+            res.status(200).json({
+              success: true,
+              token: "Bearer " + token
+            });
+          });
+        } else {
+          res.status(400).json({
+            text: "Invalid username or password"
+          });
+        }
+      });
+    }
   });
 };

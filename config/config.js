@@ -4,3 +4,7 @@ export const dev_db_uri =
 export const database = "db_himanshu";
 
 export const dev_db_url = dev_db_uri + database;
+
+export const key = "secretKey";
+
+export const timeToExpireToken = 60 * 60;

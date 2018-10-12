@@ -8,8 +8,10 @@ var userDetail_controller = require("../controllers/userController");
 // router.get("/get/:id", product_controller.test);
 
 router.get("/", (req, res) => {
-  res.send("Hello");
+  res.status(404).json({ text: "Not found" });
 });
+
+router.get("/login", userDetail_controller.login);
 
 router.post("/create", userDetail_controller.user_create);
 

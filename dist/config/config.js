@@ -8,3 +8,7 @@ var dev_db_uri = exports.dev_db_uri = "mongodb://hraj3116:one23456@ds161092.mlab
 var database = exports.database = "db_himanshu";
 
 var dev_db_url = exports.dev_db_url = dev_db_uri + database;
+
+var key = exports.key = "secretKey";
+
+var timeToExpireToken = exports.timeToExpireToken = 60 * 60;

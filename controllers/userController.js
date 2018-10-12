@@ -1,9 +1,13 @@
 var UserDetails = require("../models/user");
 var bcrypt = require("bcryptjs");
+import { key } from "./../config/config";
+import { timeToExpireToken } from "./../config/config";
+const jwt = require("jsonwebtoken");
 
 //Simple version, without validation or sanitation
 exports.test = function(req, res) {
-  res.send("Greetings from the Test controller!");
+  //res.send("Greetings from the Test controller!");
+  res.status(404).json({ text: "Not found" });
 };
 
 exports.user_create = function(req, res) {
@@ -28,7 +32,7 @@ exports.user_create = function(req, res) {
 
 exports.get_user = function(req, res) {
   UserDetails.findById(req.params.id, function(err, user) {
-    if (err) return next(err);
+    if (err) return res.json(err); //next(err);
     res.send(user);
   });
 };
@@ -64,5 +68,48 @@ exports.user_delete = function(req, res) {
   UserDetails.findByIdAndRemove(req.params.id, function(err) {
     if (err) return next(err);
     res.send("Deleted successfully!");
+  });
+};
+
+export let login = (req, res) => {
+  let email = req.query.email;
+  let password = req.query.password;
+  if (!email) {
+    res.json({ text: "Please insert email" });
+    return;
+  }
+  if (!password) {
+    res.json({ text: "Please insert password" });
+    return;
+  }
+  UserDetails.findOne({ email: email }, (err, user) => {
+    if (err) res.json({ text: "user not found", err });
+    else {
+      bcrypt.compare(password, user.password, function(err, result) {
+        console.log(result);
+        if (result == true) {
+          const payload = {
+            email: user.email,
+            name: user.name,
+            phone: user.phone
+          };
+          jwt.sign(
+            payload,
+            key,
+            { expiresIn: timeToExpireToken },
+            (err, token) => {
+              res.status(200).json({
+                success: true,
+                token: "Bearer " + token
+              });
+            }
+          );
+        } else {
+          res.status(400).json({
+            text: "Invalid username or password"
+          });
+        }
+      });
+    }
   });
 };
