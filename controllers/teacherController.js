@@ -1,4 +1,4 @@
-var UserDetails = require("../models/user");
+var TeacherDetails = require("../models/teacher");
 var bcrypt = require("bcryptjs");
 import { key } from "./../config/config";
 import { timeToExpireToken } from "./../config/config";
@@ -10,20 +10,15 @@ exports.test = function(req, res) {
   res.status(404).json({ text: "Not found" });
 };
 
-exports.user_create = function(req, res) {
-  var user = new UserDetails({
-    name: req.body.name,
-    email: req.body.email,
-    dob: req.body.dob,
-    phone: req.body.phone,
-    password: req.body.password,
-    address: req.body.address
-  });
+exports.teacherCreate = function(req, res) {
+  let obj = req.body;
+  obj.delete = false;
+  var teacher = new TeacherDetails(obj);
   bcrypt.genSalt(10, (err, salt) =>
-    bcrypt.hash(user.password, salt, (err, hash) => {
+    bcrypt.hash(teacher.password, salt, (err, hash) => {
       if (err) throw err;
-      user.password = hash;
-      user
+      teacher.password = hash;
+      teacher
         .save()
         .then(user => res.json(user))
         .catch(err => console.log(err));
@@ -31,48 +26,50 @@ exports.user_create = function(req, res) {
   );
 };
 
-exports.get_user = function(req, res) {
-  UserDetails.findById(req.params.id, function(err, user) {
+exports.teacherGet = function(req, res) {
+  TeacherDetails.findById(req.params.teacherId, function(err, user) {
     if (err) return res.json(err); //next(err);
     res.send(user);
   });
 };
 
-exports.user_update = function(req, res) {
+exports.teacherUpdate = function(req, res) {
   if (req.body.password) {
     bcrypt.genSalt(10, (err, salt) =>
       bcrypt.hash(req.body.password, salt, (err, hash) => {
         if (err) throw err;
         let obj = req.body;
         obj.password = hash;
-        UserDetails.findByIdAndUpdate(req.params.id, { $set: obj }, function(
-          err,
-          user
-        ) {
-          if (err) res.send(err);
-          res.send("User udpated.");
-        });
+        TeacherDetails.findByIdAndUpdate(
+          req.params.teacherId,
+          { $set: obj },
+          function(err, user) {
+            if (err) res.send(err);
+            res.send("User udpated.");
+          }
+        );
       })
     );
   } else {
-    UserDetails.findByIdAndUpdate(req.params.id, { $set: obj }, function(
-      err,
-      user
-    ) {
-      if (err) res.send(err);
-      res.send("User udpated.");
-    });
+    TeacherDetails.findByIdAndUpdate(
+      req.params.teacherId,
+      { $set: obj },
+      function(err, user) {
+        if (err) res.send(err);
+        res.send("User udpated.");
+      }
+    );
   }
 };
 
-exports.user_delete = function(req, res) {
-  UserDetails.findByIdAndRemove(req.params.id, function(err) {
+exports.teacherDelete = function(req, res) {
+  TeacherDetails.findByIdAndRemove(req.params.teacherId, function(err) {
     if (err) return next(err);
     res.send("Deleted successfully!");
   });
 };
 
-export let userLogin = (req, res) => {
+export let teacherLogin = (req, res) => {
   let email = req.query.email;
   let password = req.query.password;
   if (!email) {
@@ -83,16 +80,16 @@ export let userLogin = (req, res) => {
     res.json({ text: "Please insert password" });
     return;
   }
-  UserDetails.findOne({ email: email }, (err, user) => {
+  TeacherDetails.findOne({ email: email }, (err, teacher) => {
     if (err) res.json({ text: "user not found", err });
     else {
-      if (user === null) {
+      if (teacher === null) {
         return res.status(400).json({
           success: false,
           error: "Invalid username or password"
         });
       }
-      bcrypt.compare(password, user.password, function(err, result) {
+      bcrypt.compare(password, teacher.password, function(err, result) {
         console.log(result);
         if (result == true) {
           const payload = {

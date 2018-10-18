@@ -13,7 +13,7 @@ exports.test = function(req, res) {
 
 exports.student_create = function(req, res) {
   let obj = req.body;
-  obj.deleted = true;
+  obj.deleted = false;
   obj.studentId = uuid();
   let student = new StudentDetails(obj);
   student
