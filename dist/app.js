@@ -5,7 +5,6 @@ var _config = require("././config/config");
 var express = require("express"); // app.js
 
 var bodyParser = require("body-parser");
-var passport = require("passport");
 var userDetails = require("./routes/userDetails");
 var app = express();
 var jwt = require("jsonwebtoken");

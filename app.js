@@ -2,7 +2,6 @@
 import { dev_db_url, key } from "././config/config";
 var express = require("express");
 var bodyParser = require("body-parser");
-var passport = require("passport");
 var userDetails = require("./routes/userDetails");
 var app = express();
 var jwt = require("jsonwebtoken");
