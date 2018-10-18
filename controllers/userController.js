@@ -10,7 +10,7 @@ exports.test = function(req, res) {
   res.status(404).json({ text: "Not found" });
 };
 
-exports.user_create = function(req, res) {
+exports.userCreate = function(req, res) {
   var user = new UserDetails({
     name: req.body.name,
     email: req.body.email,
@@ -31,14 +31,14 @@ exports.user_create = function(req, res) {
   );
 };
 
-exports.get_user = function(req, res) {
+exports.userGet = function(req, res) {
   UserDetails.findById(req.params.id, function(err, user) {
     if (err) return res.json(err); //next(err);
     res.send(user);
   });
 };
 
-exports.user_update = function(req, res) {
+exports.userUpdate = function(req, res) {
   if (req.body.password) {
     bcrypt.genSalt(10, (err, salt) =>
       bcrypt.hash(req.body.password, salt, (err, hash) => {
@@ -65,7 +65,7 @@ exports.user_update = function(req, res) {
   }
 };
 
-exports.user_delete = function(req, res) {
+exports.userDelete = function(req, res) {
   UserDetails.findByIdAndRemove(req.params.id, function(err) {
     if (err) return next(err);
     res.send("Deleted successfully!");

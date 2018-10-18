@@ -64,7 +64,7 @@ exports.teacherUpdate = function(req, res) {
 
 exports.teacherDelete = function(req, res) {
   TeacherDetails.findByIdAndRemove(req.params.teacherId, function(err) {
-    if (err) return next(err);
+    if (err) return res.send(err);
     res.send("Deleted successfully!");
   });
 };

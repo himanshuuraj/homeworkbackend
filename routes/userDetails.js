@@ -11,14 +11,14 @@ router.get("/", (req, res) => {
   res.status(404).json({ text: "Not found" });
 });
 
-router.get("/login", userDetail_controller.login);
+router.get("/login", userDetail_controller.userLogin);
 
-router.post("/create", userDetail_controller.user_create);
+router.post("/create", userDetail_controller.userCreate);
 
-router.get("/:id", userDetail_controller.get_user);
+router.get("/:id", userDetail_controller.userGet);
 
-router.put("/:id/update", userDetail_controller.user_update);
+router.put("/:id/update", userDetail_controller.userUpdate);
 
-router.delete("/:id/delete", userDetail_controller.user_delete);
+router.delete("/:id/delete", userDetail_controller.userDelete);
 
 module.exports = router;
