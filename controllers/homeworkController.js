@@ -30,7 +30,7 @@ exports.homeworkUpdate = function(req, res) {
 };
 
 exports.homeworkDelete = function(req, res) {
-  UserDetails.findByIdAndRemove(req.params.homeworkId, function(err) {
+  HomeworkDetails.findByIdAndRemove(req.params.homeworkId, function(err) {
     if (err) return next(err);
     res.send("Deleted successfully!");
   });
