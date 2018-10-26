@@ -1,7 +1,7 @@
 var HomeworkDetails = require("../models/homework");
 import { uuid } from "../global/utils";
 
-exports.homeWorkCreate = function(req, res) {
+exports.homeworkCreate = function(req, res) {
   let obj = req.body;
   obj.homeworkId = uuid();
   let HomeworkDetails = new HomeworkDetails(obj);
@@ -10,14 +10,14 @@ exports.homeWorkCreate = function(req, res) {
     .catch(err => console.log(err));
 };
 
-exports.homeWorkGet = function(req, res) {
+exports.homeworkGet = function(req, res) {
   HomeworkDetails.findById(req.params.homeworkId, function(err, user) {
     if (err) return next(err); //res.json(err);
     res.send(user);
   });
 };
 
-exports.homeWorkUpdate = function(req, res) {
+exports.homeworkUpdate = function(req, res) {
   let obj = req.body;
   HomeworkDetails.findByIdAndUpdate(
     req.params.homeworkId,
@@ -29,7 +29,7 @@ exports.homeWorkUpdate = function(req, res) {
   );
 };
 
-exports.homeWorkDelete = function(req, res) {
+exports.homeworkDelete = function(req, res) {
   UserDetails.findByIdAndRemove(req.params.homeworkId, function(err) {
     if (err) return next(err);
     res.send("Deleted successfully!");

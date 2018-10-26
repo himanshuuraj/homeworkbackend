@@ -11,12 +11,12 @@ router.get("/", (req, res) => {
   res.status(404).json({ text: "Not found" });
 });
 
-router.post("/create", teacherController.teacherCreate);
+// router.post("/create", teacherController.teacherCreate);
 
-router.get("/:id", teacherController.teacherGet);
+// router.get("/:id", teacherController.teacherGet);
 
-router.put("/:id/update", teacherController.teacherUpdate);
+// router.put("/:id/update", teacherController.teacherUpdate);
 
-router.delete("/:id/delete", teacherController.teacherDelete);
+// router.delete("/:id/delete", teacherController.teacherDelete);
 
 module.exports = router;

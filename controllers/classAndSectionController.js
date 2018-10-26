@@ -22,7 +22,7 @@ exports.classAndSectionCreate = function(req, res) {
     .catch(err => console.log(err));
 };
 
-exports.ClassAndSectionGet = function(req, res) {
+exports.classAndSectionGet = function(req, res) {
   ClassAndSectionDetails.findById(req.params.classAndSectionId, function(
     err,
     user
