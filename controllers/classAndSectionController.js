@@ -18,17 +18,17 @@ exports.classAndSectionCreate = function(req, res) {
   let classAndSection = new ClassAndSectionDetails(obj);
   classAndSection
     .save()
-    .then(user => res.json(user))
+    .then(classAndSection => res.json(classAndSection))
     .catch(err => console.log(err));
 };
 
 exports.classAndSectionGet = function(req, res) {
   ClassAndSectionDetails.findById(req.params.classAndSectionId, function(
     err,
-    user
+    classAndSection
   ) {
     if (err) return next(err); //res.json(err);
-    res.send(user);
+    return res.send(classAndSection);
   });
 };
 
@@ -36,9 +36,9 @@ exports.classAndSectionUpdate = function(req, res) {
   ClassAndSectionDetails.findByIdAndUpdate(
     req.params.classAndSectionId,
     { $set: obj },
-    function(err, user) {
+    function(err, classAndSection) {
       if (err) res.send(err);
-      res.send("User udpated.");
+      return res.send("Class And Section udpated.");
     }
   );
 };
@@ -46,6 +46,6 @@ exports.classAndSectionUpdate = function(req, res) {
 exports.classAndSectionDelete = function(req, res) {
   UserDetails.findByIdAndRemove(req.params.classAndSectionId, function(err) {
     if (err) return next(err);
-    res.send("Deleted successfully!");
+    return res.send("Deleted successfully!");
   });
 };
