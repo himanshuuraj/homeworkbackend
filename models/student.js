@@ -13,7 +13,8 @@ var StudentSchema = new Schema({
   phone: { type: String, required: false },
   bloodGroup: { type: String, required: false },
   gender: { type: String, required: false },
-  deleted: { type: String, required: false }
+  deleted: { type: String, required: false },
+  homework: { type: Object, required: false }
 });
 
 // Export the model

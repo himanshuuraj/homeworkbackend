@@ -18,6 +18,7 @@ exports.homeWorkGet = function(req, res) {
 };
 
 exports.homeWorkUpdate = function(req, res) {
+  let obj = req.body;
   HomeworkDetails.findByIdAndUpdate(
     req.params.homeworkId,
     { $set: obj },

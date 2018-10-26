@@ -1,17 +1,7 @@
 var StudentDetails = require("../models/student");
-var bcrypt = require("bcryptjs");
-import { key } from "../config/config";
-import { timeToExpireToken } from "../config/config";
-const jwt = require("jsonwebtoken");
 import { uuid } from "./../global/utils";
 
-//Simple version, without validation or sanitation
-exports.test = function(req, res) {
-  //res.send("Greetings from the Test controller!");
-  res.status(404).json({ text: "Not found" });
-};
-
-exports.student_create = function(req, res) {
+exports.studentCreate = function(req, res) {
   let obj = req.body;
   obj.deleted = false;
   obj.studentId = uuid();
@@ -22,27 +12,39 @@ exports.student_create = function(req, res) {
     .catch(err => console.log(err));
 };
 
-exports.get_student = function(req, res) {
+exports.studentGet = function(req, res) {
   StudentDetails.findById(req.params.studentId, function(err, user) {
     if (err) return next(err); //res.json(err);
     res.send(user);
   });
 };
 
-exports.student_update = function(req, res) {
+exports.studentUpdate = function(req, res) {
+  let obj = req.body;
   StudentDetails.findByIdAndUpdate(
     req.params.studentId,
     { $set: obj },
     function(err, user) {
       if (err) res.send(err);
-      res.send("User udpated.");
+      res.send("Student udpated.");
     }
   );
 };
 
-exports.user_delete = function(req, res) {
-  UserDetails.findByIdAndRemove(req.params.studentId, function(err) {
+exports.studentDelete = function(req, res) {
+  StudentDetails.findByIdAndRemove(req.params.studentId, function(err) {
     if (err) return next(err);
     res.send("Deleted successfully!");
   });
+};
+
+exports.studentHomeworkUpdate = (req, res) => {
+  StudentDetails.findByIdAndUpdate(
+    req.params.studentId,
+    { $set: obj },
+    function(err, student) {
+      if (err) res.send(err);
+      res.send(student);
+    }
+  );
 };

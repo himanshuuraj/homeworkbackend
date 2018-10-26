@@ -11,4 +11,4 @@ var HomeworkSchema = new Schema({
 });
 
 // Export the model
-module.exports = mongoose.model("UserDetails", UserSchema);
+module.exports = mongoose.model("HomeworkDetails", HomeworkSchema);

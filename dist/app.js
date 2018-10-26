@@ -6,6 +6,10 @@ var express = require("express"); // app.js
 
 var bodyParser = require("body-parser");
 var userDetails = require("./routes/userDetails");
+var studentDetails = require("./routes/studentDetails");
+var teacherDetails = require("./routes/teacherDetails");
+var homeworkDetails = require("./routes/homeworkDetails");
+var classAndSectionDetails = require("./routes/classAndSectionDetails");
 var app = express();
 var jwt = require("jsonwebtoken");
 var url = require("url");
@@ -59,6 +63,10 @@ app.use(function (req, res, next) {
 });
 
 app.use("/user", userDetails);
+app.use("/student", studentDetails);
+app.use("/teacher", teacherDetails);
+app.use("/homework", homeworkDetails);
+app.use("/classAndSection", classAndSectionDetails);
 
 // default port here
 var port = 8080;
