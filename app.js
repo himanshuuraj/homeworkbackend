@@ -1,6 +1,7 @@
 // app.js
 import { dev_db_url, key } from "././config/config";
 var express = require("express");
+var cors = require('cors');
 var bodyParser = require("body-parser");
 var userDetails = require("./routes/userDetails");
 var studentDetails = require("./routes/studentDetails");
@@ -23,7 +24,7 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 // middleware routing
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
+app.use(cors());
 app.use((req, res, next) => {
   var url_parts = url.parse(req.url);
   if (
@@ -37,6 +38,7 @@ app.use((req, res, next) => {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept"
   );
+  // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   if (req.method === "Options") {
     res.header("Access-Control-Allow-Methods", "PUT, POST, DELETE");
     return res.status(200).json({});

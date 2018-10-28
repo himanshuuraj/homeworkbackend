@@ -73,15 +73,13 @@ exports.userDelete = function(req, res) {
 };
 
 export let userLogin = (req, res) => {
-  let email = req.query.email;
-  let password = req.query.password;
+  let email = req.body.email;
+  let password = req.body.password;
   if (!email) {
-    res.json({ text: "Please insert email" });
-    return;
+    return res.json({ text: "Please insert email" });
   }
   if (!password) {
-    res.json({ text: "Please insert password" });
-    return;
+    return res.json({ text: "Please insert password" });
   }
   UserDetails.findOne({ email: email }, (err, user) => {
     if (err) res.json({ text: "user not found", err });
