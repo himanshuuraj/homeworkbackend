@@ -91,7 +91,6 @@ export let userLogin = (req, res) => {
         });
       }
       bcrypt.compare(password, user.password, function(err, result) {
-        console.log(result);
         if (result == true) {
           const payload = {
             email: user.email,
