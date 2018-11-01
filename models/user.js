@@ -10,6 +10,7 @@ var UserSchema = new Schema({
   children: { type: Array, required: true },
   address: { type: String, required: true },
   id: { type: String, required: true },
+  userType : { type: String, required: true },
   deleted: { type: String, required: true }
 });
 

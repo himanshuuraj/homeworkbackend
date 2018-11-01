@@ -12,6 +12,7 @@ var TeacherSchema = new Schema({
   gender: { type: String, required: false },
   password: { type: String, required: true },
   deleted: { type: String, required: false },
+  userType : { type: String, required: true },
   address: { type: String, required: true }
 });
 

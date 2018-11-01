@@ -12,7 +12,7 @@ exports.subjectCreate = function(req, res) {
 
 exports.subjectGet = function(req, res) {
   SubjectDetails.findById(req.params.subjectId, function(err, user) {
-    if (err) return next(err); //res.json(err);
+    if (err) return next(err);
     res.send(user);
   });
 };

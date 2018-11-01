@@ -15,6 +15,7 @@ var StudentSchema = new Schema({
   gender: { type: String, required: false },
   deleted: { type: String, required: false },
   homework: { type: Object, required: false },
+  userType : { type: String, required: true },
   address: { type: String, required: true }
 });
 

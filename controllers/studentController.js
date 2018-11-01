@@ -5,6 +5,7 @@ exports.studentCreate = function(req, res) {
   let obj = req.body;
   obj.deleted = false;
   obj.studentId = uuid();
+  obj.userType = "student";
   let student = new StudentDetails(obj);
   student
     .save()

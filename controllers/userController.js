@@ -2,6 +2,7 @@ var UserDetails = require("../models/user");
 var bcrypt = require("bcryptjs");
 import { key } from "./../config/config";
 import { timeToExpireToken } from "./../config/config";
+import { uuid } from "./../global/utils";
 const jwt = require("jsonwebtoken");
 
 //Simple version, without validation or sanitation
@@ -10,25 +11,24 @@ exports.test = function(req, res) {
 };
 
 exports.userCreate = function(req, res) {
-  var user = new UserDetails({
-    name: req.body.name,
-    email: req.body.email,
-    dob: req.body.dob,
-    phone: req.body.phone,
-    password: req.body.password,
-    address: req.body.address,
-    deleted : false,
-    id : uuid(),
-    children : []
-  });
-  console.log(req.body, 31);
+  let obj = req.body;
+  obj.deleted = false;
+  obj.id = "PR" + uuid();
+  obj.children = [];
+  obj.userType = "parent";
+  var user = new UserDetails(obj);
   bcrypt.genSalt(10, (err, salt) =>
     bcrypt.hash(user.password, salt, (err, hash) => {
       if (err) throw err;
       user.password = hash;
       user
         .save()
-        .then(user => res.json(user))
+        .then(user =>{
+            // console.log(user, 18);
+            delete user.password;
+            delete user._id;
+            return res.json(user);
+        })
         .catch(err => console.log(err));
     })
   );

@@ -13,6 +13,7 @@ exports.test = function(req, res) {
 exports.teacherCreate = function(req, res) {
   let obj = req.body;
   obj.delete = false;
+  obj.userType = "teacher";
   var teacher = new TeacherDetails(obj);
   bcrypt.genSalt(10, (err, salt) =>
     bcrypt.hash(teacher.password, salt, (err, hash) => {
@@ -20,7 +21,11 @@ exports.teacherCreate = function(req, res) {
       teacher.password = hash;
       teacher
         .save()
-        .then(user => res.json(user))
+        .then(user => {
+          delete user.password;
+          delete user._id;
+          return res.json(user);
+        })
         .catch(err => console.log(err));
     })
   );
