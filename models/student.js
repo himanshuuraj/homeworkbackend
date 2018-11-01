@@ -14,7 +14,8 @@ var StudentSchema = new Schema({
   bloodGroup: { type: String, required: false },
   gender: { type: String, required: false },
   deleted: { type: String, required: false },
-  homework: { type: Object, required: false }
+  homework: { type: Object, required: false },
+  address: { type: String, required: true }
 });
 
 // Export the model

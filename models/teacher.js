@@ -11,7 +11,8 @@ var TeacherSchema = new Schema({
   phone: { type: String, required: false },
   gender: { type: String, required: false },
   password: { type: String, required: true },
-  deleted: { type: String, required: false }
+  deleted: { type: String, required: false },
+  address: { type: String, required: true }
 });
 
 // Export the model

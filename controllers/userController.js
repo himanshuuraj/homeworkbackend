@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 
 //Simple version, without validation or sanitation
 exports.test = function(req, res) {
-  //res.send("Greetings from the Test controller!");
   res.status(404).json({ text: "Not found" });
 };
 
@@ -17,8 +16,12 @@ exports.userCreate = function(req, res) {
     dob: req.body.dob,
     phone: req.body.phone,
     password: req.body.password,
-    address: req.body.address
+    address: req.body.address,
+    deleted : false,
+    id : uuid(),
+    children : []
   });
+  console.log(req.body, 31);
   bcrypt.genSalt(10, (err, salt) =>
     bcrypt.hash(user.password, salt, (err, hash) => {
       if (err) throw err;
