@@ -14,7 +14,7 @@ exports.test = function(req, res) {
 exports.classAndSectionCreate = function(req, res) {
   let obj = req.body;
   obj.deleted = false;
-  obj.classAndSectionId = uuid();
+  obj.classAndSectionId = "CS" + uuid();
   let classAndSection = new ClassAndSectionDetails(obj);
   classAndSection
     .save()

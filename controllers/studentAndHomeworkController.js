@@ -3,7 +3,7 @@ import { uuid } from "../global/utils";
 
 exports.studentAndHomeworkCreate = function(req, res) {
   let obj = req.body;
-  obj.StudentAndHomeworkId = uuid();
+  obj.StudentAndHomeworkId = "SH" + uuid();
   let StudentAndHomeworkDetails = new StudentAndHomeworkDetails(obj);
   StudentAndHomeworkDetails.save()
     .then(user => res.json(user))
@@ -13,10 +13,10 @@ exports.studentAndHomeworkCreate = function(req, res) {
 exports.studentAndHomeworkGet = function(req, res) {
   StudentAndHomeworkDetails.findById(req.params.studentAndHomeworkId, function(
     err,
-    user
+    studentHomework
   ) {
     if (err) return next(err); //res.json(err);
-    res.send(user);
+    res.send(studentHomework);
   });
 };
 
@@ -25,9 +25,9 @@ exports.studentAndHomeworkUpdate = function(req, res) {
   StudentAndHomeworkDetails.findByIdAndUpdate(
     req.params.studentAndHomeworkId,
     { $set: obj },
-    function(err, user) {
+    function(err, studentHomework) {
       if (err) res.send(err);
-      res.send("User udpated.");
+      res.send("Student Homework udpated.");
     }
   );
 };

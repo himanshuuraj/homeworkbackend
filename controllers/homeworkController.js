@@ -3,7 +3,7 @@ import { uuid } from "../global/utils";
 
 exports.homeworkCreate = function(req, res) {
   let obj = req.body;
-  obj.homeworkId = uuid();
+  obj.homeworkId = "HW" + uuid();
   let HomeworkDetails = new HomeworkDetails(obj);
   HomeworkDetails.save()
     .then(user => res.json(user))

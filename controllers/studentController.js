@@ -9,14 +9,14 @@ exports.studentCreate = function(req, res) {
   let student = new StudentDetails(obj);
   student
     .save()
-    .then(user => res.json(user))
+    .then(student => res.json(student))
     .catch(err => console.log(err));
 };
 
 exports.studentGet = function(req, res) {
-  StudentDetails.findById(req.params.studentId, function(err, user) {
+  StudentDetails.findById(req.params.studentId, function(err, student) {
     if (err) return next(err); //res.json(err);
-    res.send(user);
+    res.send(student);
   });
 };
 
@@ -25,7 +25,7 @@ exports.studentUpdate = function(req, res) {
   StudentDetails.findByIdAndUpdate(
     req.params.studentId,
     { $set: obj },
-    function(err, user) {
+    function(err, student) {
       if (err) res.send(err);
       res.send("Student udpated.");
     }

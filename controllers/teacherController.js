@@ -21,10 +21,10 @@ exports.teacherCreate = function(req, res) {
       teacher.password = hash;
       teacher
         .save()
-        .then(user => {
-          delete user.password;
-          delete user._id;
-          return res.json(user);
+        .then(teacher => {
+          delete teacher.password;
+          delete teacher._id;
+          return res.json(teacher);
         })
         .catch(err => console.log(err));
     })
@@ -32,9 +32,9 @@ exports.teacherCreate = function(req, res) {
 };
 
 exports.teacherGet = function(req, res) {
-  TeacherDetails.findById(req.params.teacherId, function(err, user) {
+  TeacherDetails.findById(req.params.teacherId, function(err, teacher) {
     if (err) return res.json(err); //next(err);
-    res.send(user);
+    res.send(teacher);
   });
 };
 
@@ -48,9 +48,9 @@ exports.teacherUpdate = function(req, res) {
         TeacherDetails.findByIdAndUpdate(
           req.params.teacherId,
           { $set: obj },
-          function(err, user) {
+          function(err, teacher) {
             if (err) res.send(err);
-            res.send("User udpated.");
+            res.send("Teacher udpated.");
           }
         );
       })
@@ -59,9 +59,9 @@ exports.teacherUpdate = function(req, res) {
     TeacherDetails.findByIdAndUpdate(
       req.params.teacherId,
       { $set: obj },
-      function(err, user) {
+      function(err, teacher) {
         if (err) res.send(err);
-        res.send("User udpated.");
+        res.send("Teacher udpated.");
       }
     );
   }

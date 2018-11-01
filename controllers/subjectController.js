@@ -11,9 +11,9 @@ exports.subjectCreate = function(req, res) {
 };
 
 exports.subjectGet = function(req, res) {
-  SubjectDetails.findById(req.params.subjectId, function(err, user) {
+  SubjectDetails.findById(req.params.subjectId, function(err, subject) {
     if (err) return next(err);
-    res.send(user);
+    res.send(subject);
   });
 };
 
