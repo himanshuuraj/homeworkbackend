@@ -5,8 +5,8 @@ var ClassAndSectionSchema = new Schema({
   name: { type: String, required: true },
   classAndSectionId: { type: String, required: true },
   classAndSectionName: { type: String, required: true },
-  deleted: { type: String, required: false },
-  subjects: { type: Array, required: false }
+  subjects: { type: Array, required: false },  // subjectId and subjectName
+  deleted: { type: String, required: false }
 });
 
 // Export the model

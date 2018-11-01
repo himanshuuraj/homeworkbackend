@@ -3,7 +3,7 @@ import { dev_db_url, key } from "././config/config";
 var express = require("express");
 var cors = require('cors');
 var bodyParser = require("body-parser");
-var userDetails = require("./routes/userDetails");
+var parentDetails = require("./routes/parentDetails");
 var studentDetails = require("./routes/studentDetails");
 var teacherDetails = require("./routes/teacherDetails");
 var homeworkDetails = require("./routes/homeworkDetails");
@@ -28,8 +28,8 @@ app.use(cors());
 app.use((req, res, next) => {
   var url_parts = url.parse(req.url);
   if (
-    url_parts.pathname === "/user/login" ||
-    url_parts.pathname === "/user/create"
+    url_parts.pathname === "/parent/login" ||
+    url_parts.pathname === "/parent/create"
   ) {
     return next();
   }
@@ -68,7 +68,7 @@ app.use((req, res, next) => {
   }
 });
 
-app.use("/user", userDetails);
+app.use("/parent", parentDetails);
 app.use("/student", studentDetails);
 app.use("/teacher", teacherDetails);
 app.use("/homework", homeworkDetails);

@@ -2,10 +2,9 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var TeacherSchema = new Schema({
-  name: { type: String, required: true },
+  teacherName: { type: String, required: true },
   teacherId: { type: String, required: true },
-  classAndSectionId: { type: String, required: true },
-  classAndSectionName: { type: String, required: true },
+  subjects: { type: Array, required: false },
   email: { type: String, required: true },
   dob: { type: Number, required: false },
   phone: { type: String, required: false },
