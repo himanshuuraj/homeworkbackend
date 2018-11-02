@@ -1,7 +1,7 @@
 // app.js
 import { dev_db_url, key } from "././config/config";
 var express = require("express");
-var cors = require('cors');
+var cors = require("cors");
 var bodyParser = require("body-parser");
 var parentDetails = require("./routes/parentDetails");
 var studentDetails = require("./routes/studentDetails");
@@ -80,12 +80,3 @@ var port = 8080;
 app.listen(port, () => {
   console.log("Server is up and running on port numner " + port);
 });
-
-// Response for post here
-// res.json({
-//   message: in case of success true,
-//   success : true or false,
-//   body : data send from the frontend - revert it back,
-//   error : in case of success false,
-//   token : only in case of login
-// });

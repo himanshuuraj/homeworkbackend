@@ -5,3 +5,12 @@ export const uuid = function() {
     return v.toString(16);
   });
 };
+
+export let responseObj = {
+  body: null, //in case of success true,
+  success: false, //true or false,
+  param: null, // data send from the frontend - revert it back,
+  error: null, // in case of success false,
+  message: "", // this is message
+  token: null // only in case of login
+};

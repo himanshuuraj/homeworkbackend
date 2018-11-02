@@ -5,7 +5,6 @@ import { timeToExpireToken } from "./../config/config";
 import { uuid } from "./../global/utils";
 const jwt = require("jsonwebtoken");
 
-//Simple version, without validation or sanitation
 exports.test = function(req, res) {
   res.status(404).json({ text: "Not found" });
 };
@@ -23,21 +22,41 @@ exports.parentCreate = function(req, res) {
       parent.password = hash;
       parent
         .save()
-        .then(parent =>{
-            // console.log(parent, 18);
-            delete parent.password;
-            delete parent._id;
-            return res.json(parent);
+        .then(parent => {
+          delete parent.password;
+          delete parent._id;
+          responseObj.success = true;
+          responseObj.body = parent;
+          responseObj.param = req.body;
+          responseObj.message = "Parent Created Successfully";
+          return res.json(responseObj);
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          responseObj.success = false;
+          responseObj.error = err;
+          responseObj.param = req.body;
+          responseObj.message = "Error in creating parent";
+          return res.json(responseObj);
+        });
     })
   );
 };
 
 exports.parentGet = function(req, res) {
   ParentDetails.findById(req.params.id, function(err, parent) {
-    if (err) return res.json(err); //next(err);
-    res.send(parent);
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.params;
+      responseObj.message = "Error in getting parent";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = parent;
+      responseObj.param = req.params;
+      responseObj.message = "Parent Data";
+      return res.json(responseObj);
+    }
   });
 };
 
@@ -52,8 +71,19 @@ exports.parentUpdate = function(req, res) {
           err,
           parent
         ) {
-          if (err) res.send(err);
-          res.send("Parent udpated.");
+          if (err) {
+            responseObj.success = false;
+            responseObj.error = err;
+            responseObj.param = req.params;
+            responseObj.message = "Error in updating parent";
+            return res.json(responseObj);
+          } else {
+            responseObj.success = true;
+            responseObj.body = parent;
+            responseObj.param = req.params;
+            responseObj.message = "Parent updated successfully";
+            return res.json(responseObj);
+          }
         });
       })
     );
@@ -62,16 +92,38 @@ exports.parentUpdate = function(req, res) {
       err,
       parent
     ) {
-      if (err) res.send(err);
-      res.send("Parent udpated.");
+      if (err) {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.param = req.params;
+        responseObj.message = "Error in updating parent";
+        return res.json(responseObj);
+      } else {
+        responseObj.success = true;
+        responseObj.body = parent;
+        responseObj.param = req.params;
+        responseObj.message = "Parent updated successfully";
+        return res.json(responseObj);
+      }
     });
   }
 };
 
 exports.parentDelete = function(req, res) {
-  ParentDetails.findByIdAndRemove(req.params.id, function(err) {
-    if (err) return next(err);
-    res.send("Deleted successfully!");
+  ParentDetails.findByIdAndRemove(req.params.id, function(err, parent) {
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.params;
+      responseObj.message = "Error in deleting class and section";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = parent;
+      responseObj.param = req.params;
+      responseObj.message = "Class And Section deleted successfully";
+      return res.json(responseObj);
+    }
   });
 };
 
@@ -79,19 +131,29 @@ export let parentLogin = (req, res) => {
   let email = req.body.email;
   let password = req.body.password;
   if (!email) {
-    return res.json({ text: "Please insert email" });
+    responseObj.param = req.body;
+    responseObj.message = "Please insert email";
+    return res.json(responseObj);
   }
   if (!password) {
-    return res.json({ text: "Please insert password" });
+    responseObj.param = req.body;
+    responseObj.message = "Please insert password";
+    return res.json(responseObj);
   }
   ParentDetails.findOne({ email: email }, (err, parent) => {
-    if (err) res.json({ text: "parent not found", err });
-    else {
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.body;
+      responseObj.message = "Error in getting parentDetail";
+      return res.json(responseObj);
+    } else {
       if (parent === null) {
-        return res.status(400).json({
-          success: false,
-          error: "Invalid parentname or password"
-        });
+        responseObj.success = false;
+        responseObj.body = parent;
+        responseObj.param = req.body;
+        responseObj.message = "Invalid username or password";
+        return res.json(responseObj);
       }
       bcrypt.compare(password, parent.password, function(err, result) {
         if (result == true) {
@@ -105,17 +167,20 @@ export let parentLogin = (req, res) => {
             key,
             { expiresIn: timeToExpireToken },
             (err, token) => {
-              return res.status(200).json({
-                success: true,
-                token: "Bearer " + token
-              });
+              responseObj.success = true;
+              responseObj.body = parent;
+              responseObj.param = req.body;
+              responseObj.message = "login successful";
+              responseObj.token = "Bearer " + token;
+              return res.json(responseObj);
             }
           );
         } else {
-          return res.status(400).json({
-            success: false,
-            error: "Invalid parentname or password"
-          });
+          responseObj.success = false;
+          responseObj.body = parent;
+          responseObj.param = req.body;
+          responseObj.message = "Invalid parentname or password";
+          return res.json(responseObj);
         }
       });
     }

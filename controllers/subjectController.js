@@ -6,14 +6,37 @@ exports.subjectCreate = function(req, res) {
   objsubjectId = uuid();
   let SubjectDetails = new SubjectDetails(obj);
   SubjectDetails.save()
-    .then(subject => res.json(subject))
-    .catch(err => console.log(err));
+    .then(subject => {
+      responseObj.success = true;
+      responseObj.body = subject;
+      responseObj.param = req.body;
+      responseObj.message = "Subject Created Successfully";
+      return res.json(responseObj);
+    })
+    .catch(err => {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.body;
+      responseObj.message = "Error in creating subject";
+      return res.json(responseObj);
+    });
 };
 
 exports.subjectGet = function(req, res) {
   SubjectDetails.findById(req.params.subjectId, function(err, subject) {
-    if (err) return next(err);
-    res.send(subject);
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.params;
+      responseObj.message = "Error in getting subject data";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = subject;
+      responseObj.param = req.params;
+      responseObj.message = "Subject Data";
+      return res.json(responseObj);
+    }
   });
 };
 
@@ -23,15 +46,40 @@ exports.subjectUpdate = function(req, res) {
     req.params.subjectId,
     { $set: obj },
     function(err, subject) {
-      if (err) res.send(err);
-      res.send("Subject udpated.");
+      if (err) {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.param = req.params;
+        responseObj.message = "Error in updating subject";
+        return res.json(responseObj);
+      } else {
+        responseObj.success = true;
+        responseObj.body = subject;
+        responseObj.param = req.params;
+        responseObj.message = "Subject updated successfully";
+        return res.json(responseObj);
+      }
     }
   );
 };
 
 exports.subjectDelete = function(req, res) {
-  SubjectDetails.findByIdAndRemove(req.params.subjectId, function(err) {
-    if (err) return next(err);
-    res.send("Deleted successfully!");
+  SubjectDetails.findByIdAndRemove(req.params.subjectId, function(
+    err,
+    subject
+  ) {
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.params;
+      responseObj.message = "Error in deleting subject";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = subject;
+      responseObj.param = req.params;
+      responseObj.message = "Student deleted successfully";
+      return res.json(responseObj);
+    }
   });
 };

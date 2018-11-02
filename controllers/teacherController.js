@@ -24,17 +24,38 @@ exports.teacherCreate = function(req, res) {
         .then(teacher => {
           delete teacher.password;
           delete teacher._id;
-          return res.json(teacher);
+          responseObj.success = true;
+          responseObj.body = teacher;
+          responseObj.param = req.body;
+          responseObj.message = "Teacher Created Successfully";
+          return res.json(responseObj);
         })
-        .catch(err => console.log(err));
+        .catch(err => {
+          responseObj.success = false;
+          responseObj.error = err;
+          responseObj.param = req.body;
+          responseObj.message = "Error in creating teacher";
+          return res.json(responseObj);
+        });
     })
   );
 };
 
 exports.teacherGet = function(req, res) {
   TeacherDetails.findById(req.params.teacherId, function(err, teacher) {
-    if (err) return res.json(err); //next(err);
-    res.send(teacher);
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.params;
+      responseObj.message = "Error in getting teacher data";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = teacher;
+      responseObj.param = req.params;
+      responseObj.message = "Teacher Data";
+      return res.json(responseObj);
+    }
   });
 };
 
@@ -49,8 +70,19 @@ exports.teacherUpdate = function(req, res) {
           req.params.teacherId,
           { $set: obj },
           function(err, teacher) {
-            if (err) res.send(err);
-            res.send("Teacher udpated.");
+            if (err) {
+              responseObj.success = false;
+              responseObj.error = err;
+              responseObj.param = req.params;
+              responseObj.message = "Error in updating teacher";
+              return res.json(responseObj);
+            } else {
+              responseObj.success = true;
+              responseObj.body = teacher;
+              responseObj.param = req.params;
+              responseObj.message = "Teacher updated successfully";
+              return res.json(responseObj);
+            }
           }
         );
       })
@@ -60,17 +92,42 @@ exports.teacherUpdate = function(req, res) {
       req.params.teacherId,
       { $set: obj },
       function(err, teacher) {
-        if (err) res.send(err);
-        res.send("Teacher udpated.");
+        if (err) {
+          responseObj.success = false;
+          responseObj.error = err;
+          responseObj.param = req.params;
+          responseObj.message = "Error in updating teacher";
+          return res.json(responseObj);
+        } else {
+          responseObj.success = true;
+          responseObj.body = teacher;
+          responseObj.param = req.params;
+          responseObj.message = "Teacher updated successfully";
+          return res.json(responseObj);
+        }
       }
     );
   }
 };
 
 exports.teacherDelete = function(req, res) {
-  TeacherDetails.findByIdAndRemove(req.params.teacherId, function(err) {
-    if (err) return res.send(err);
-    res.send("Deleted successfully!");
+  TeacherDetails.findByIdAndRemove(req.params.teacherId, function(
+    err,
+    teacher
+  ) {
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.params;
+      responseObj.message = "Error in deleting teacher";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = teacher;
+      responseObj.param = req.params;
+      responseObj.message = "Teacher deleted successfully";
+      return res.json(responseObj);
+    }
   });
 };
 
@@ -78,21 +135,29 @@ export let teacherLogin = (req, res) => {
   let email = req.query.email;
   let password = req.query.password;
   if (!email) {
-    res.json({ text: "Please insert email" });
-    return;
+    responseObj.param = req.body;
+    responseObj.message = "Please insert email";
+    return res.json(responseObj);
   }
   if (!password) {
-    res.json({ text: "Please insert password" });
-    return;
+    responseObj.param = req.body;
+    responseObj.message = "Please insert password";
+    return res.json(responseObj);
   }
   TeacherDetails.findOne({ email: email }, (err, teacher) => {
-    if (err) res.json({ text: "user not found", err });
-    else {
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.body;
+      responseObj.message = "Error in getting teacherDetail";
+      return res.json(responseObj);
+    } else {
       if (teacher === null) {
-        return res.status(400).json({
-          success: false,
-          error: "Invalid username or password"
-        });
+        responseObj.success = false;
+        responseObj.body = teacher;
+        responseObj.param = req.body;
+        responseObj.message = "Invalid username or password";
+        return res.json(responseObj);
       }
       bcrypt.compare(password, teacher.password, function(err, result) {
         console.log(result);
@@ -107,17 +172,20 @@ export let teacherLogin = (req, res) => {
             key,
             { expiresIn: timeToExpireToken },
             (err, token) => {
-              return res.status(200).json({
-                success: true,
-                token: "Bearer " + token
-              });
+              responseObj.success = true;
+              responseObj.body = parent;
+              responseObj.param = req.body;
+              responseObj.message = "login successful";
+              responseObj.token = "Bearer " + token;
+              return res.json(responseObj);
             }
           );
         } else {
-          return res.status(400).json({
-            success: false,
-            error: "Invalid username or password"
-          });
+          responseObj.success = false;
+          responseObj.body = parent;
+          responseObj.param = req.body;
+          responseObj.message = "Invalid parentname or password";
+          return res.json(responseObj);
         }
       });
     }

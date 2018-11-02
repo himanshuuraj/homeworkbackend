@@ -1,9 +1,5 @@
 var ClassAndSectionDetails = require("../models/classAndSection");
-var bcrypt = require("bcryptjs");
-import { key } from "../config/config";
-import { timeToExpireToken } from "../config/config";
-const jwt = require("jsonwebtoken");
-import { uuid } from "../global/utils";
+import { uuid, responseObj } from "../global/utils";
 
 //Simple version, without validation or sanitation
 exports.test = function(req, res) {
@@ -18,8 +14,20 @@ exports.classAndSectionCreate = function(req, res) {
   let classAndSection = new ClassAndSectionDetails(obj);
   classAndSection
     .save()
-    .then(classAndSection => res.json(classAndSection))
-    .catch(err => console.log(err));
+    .then(classAndSection => {
+      responseObj.success = true;
+      responseObj.body = classAndSection;
+      responseObj.param = req.body;
+      responseObj.message = "Class And Section Created Successfully";
+      return res.json(responseObj);
+    })
+    .catch(err => {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.body;
+      responseObj.message = "Error in creating class and section";
+      return res.json(responseObj);
+    });
 };
 
 exports.classAndSectionGet = function(req, res) {
@@ -27,8 +35,19 @@ exports.classAndSectionGet = function(req, res) {
     err,
     classAndSection
   ) {
-    if (err) return next(err); //res.json(err);
-    return res.send(classAndSection);
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.params;
+      responseObj.message = "Error in getting class and section";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = classAndSection;
+      responseObj.param = req.params;
+      responseObj.message = "Class And Section Data";
+      return res.json(responseObj);
+    }
   });
 };
 
@@ -37,15 +56,40 @@ exports.classAndSectionUpdate = function(req, res) {
     req.params.classAndSectionId,
     { $set: obj },
     function(err, classAndSection) {
-      if (err) res.send(err);
-      return res.send("Class And Section udpated.");
+      if (err) {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.param = req.params;
+        responseObj.message = "Error in updating class and section";
+        return res.json(responseObj);
+      } else {
+        responseObj.success = true;
+        responseObj.body = classAndSection;
+        responseObj.param = req.params;
+        responseObj.message = "Class And Section updated successfully";
+        return res.json(responseObj);
+      }
     }
   );
 };
 
 exports.classAndSectionDelete = function(req, res) {
-  UserDetails.findByIdAndRemove(req.params.classAndSectionId, function(err) {
-    if (err) return next(err);
-    return res.send("Deleted successfully!");
-  });
+  ClassAndSectionDetails.findByIdAndRemove(
+    req.params.classAndSectionId,
+    function(err, classAndSection) {
+      if (err) {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.param = req.params;
+        responseObj.message = "Error in deleting class and section";
+        return res.json(responseObj);
+      } else {
+        responseObj.success = true;
+        responseObj.body = classAndSection;
+        responseObj.param = req.params;
+        responseObj.message = "Class And Section deleted successfully";
+        return res.json(responseObj);
+      }
+    }
+  );
 };

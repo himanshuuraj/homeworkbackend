@@ -9,14 +9,37 @@ exports.studentCreate = function(req, res) {
   let student = new StudentDetails(obj);
   student
     .save()
-    .then(student => res.json(student))
-    .catch(err => console.log(err));
+    .then(student => {
+      responseObj.success = true;
+      responseObj.body = student;
+      responseObj.param = req.body;
+      responseObj.message = "Student Created Successfully";
+      return res.json(responseObj);
+    })
+    .catch(err => {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.body;
+      responseObj.message = "Error in creating student";
+      return res.json(responseObj);
+    });
 };
 
 exports.studentGet = function(req, res) {
   StudentDetails.findById(req.params.studentId, function(err, student) {
-    if (err) return next(err); //res.json(err);
-    res.send(student);
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.params;
+      responseObj.message = "Error in getting student data";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = student;
+      responseObj.param = req.params;
+      responseObj.message = "Student Data";
+      return res.json(responseObj);
+    }
   });
 };
 
@@ -26,26 +49,40 @@ exports.studentUpdate = function(req, res) {
     req.params.studentId,
     { $set: obj },
     function(err, student) {
-      if (err) res.send(err);
-      res.send("Student udpated.");
+      if (err) {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.param = req.params;
+        responseObj.message = "Error in updating student";
+        return res.json(responseObj);
+      } else {
+        responseObj.success = true;
+        responseObj.body = student;
+        responseObj.param = req.params;
+        responseObj.message = "Student updated successfully";
+        return res.json(responseObj);
+      }
     }
   );
 };
 
 exports.studentDelete = function(req, res) {
-  StudentDetails.findByIdAndRemove(req.params.studentId, function(err) {
-    if (err) return next(err);
-    res.send("Deleted successfully!");
-  });
-};
-
-exports.studentHomeworkUpdate = (req, res) => {
-  StudentDetails.findByIdAndUpdate(
-    req.params.studentId,
-    { $set: obj },
-    function(err, student) {
-      if (err) res.send(err);
-      res.send(student);
+  StudentDetails.findByIdAndRemove(req.params.studentId, function(
+    err,
+    student
+  ) {
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.params;
+      responseObj.message = "Error in deleting student";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = student;
+      responseObj.param = req.params;
+      responseObj.message = "Student deleted successfully";
+      return res.json(responseObj);
     }
-  );
+  });
 };
