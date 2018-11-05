@@ -3,9 +3,9 @@ import { uuid, responseObj } from "../global/utils";
 
 exports.subjectCreate = function(req, res) {
   let obj = req.body;
-  objsubjectId = "SUB" + uuid();
-  let SubjectDetails = new SubjectDetails(obj);
-  SubjectDetails.save()
+  obj.subjectId = "SUB" + uuid();
+  let subject = new SubjectDetails(obj);
+  subject.save()
     .then(subject => {
       responseObj.success = true;
       responseObj.body = subject;

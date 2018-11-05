@@ -4,8 +4,8 @@ import { uuid, responseObj } from "../global/utils";
 exports.studentAndHomeworkCreate = function(req, res) {
   let obj = req.body;
   obj.StudentAndHomeworkId = "SH" + uuid();
-  let StudentAndHomeworkDetails = new StudentAndHomeworkDetails(obj);
-  StudentAndHomeworkDetails.save()
+  let studentHomework = new StudentAndHomeworkDetails(obj);
+  studentHomework.save()
     .then(studentHomework => {
       responseObj.success = true;
       responseObj.body = studentHomework;
