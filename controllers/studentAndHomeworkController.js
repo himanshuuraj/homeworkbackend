@@ -1,5 +1,5 @@
 var StudentAndHomeworkDetails = require("../models/studentAndHomework");
-import { uuid } from "../global/utils";
+import { uuid, responseObj } from "../global/utils";
 
 exports.studentAndHomeworkCreate = function(req, res) {
   let obj = req.body;

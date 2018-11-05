@@ -3,6 +3,8 @@ var bcrypt = require("bcryptjs");
 import { key } from "./../config/config";
 import { timeToExpireToken } from "./../config/config";
 const jwt = require("jsonwebtoken");
+import { uuid, responseObj } from "../global/utils";
+
 
 //Simple version, without validation or sanitation
 exports.test = function(req, res) {
@@ -13,6 +15,7 @@ exports.test = function(req, res) {
 exports.teacherCreate = function(req, res) {
   let obj = req.body;
   obj.delete = false;
+  obj.teacherId = "TEA" + uuid();
   obj.userType = "teacher";
   var teacher = new TeacherDetails(obj);
   bcrypt.genSalt(10, (err, salt) =>

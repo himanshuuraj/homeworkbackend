@@ -2,7 +2,6 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var ClassAndSectionSchema = new Schema({
-  name: { type: String, required: true },
   classAndSectionId: { type: String, required: true },
   classAndSectionName: { type: String, required: true },
   subjects: { type: Array, required: false },  // subjectId and subjectName

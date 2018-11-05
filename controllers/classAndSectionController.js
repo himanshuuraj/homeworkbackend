@@ -8,9 +8,11 @@ exports.test = function(req, res) {
 };
 
 exports.classAndSectionCreate = function(req, res) {
-  let obj = req.body;
+  let obj = Object.assign({},req.body);
   obj.deleted = false;
   obj.classAndSectionId = "CS" + uuid();
+  obj.subjects = [];
+  console.log(obj);
   let classAndSection = new ClassAndSectionDetails(obj);
   classAndSection
     .save()

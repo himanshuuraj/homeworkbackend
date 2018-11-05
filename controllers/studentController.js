@@ -1,10 +1,10 @@
 var StudentDetails = require("../models/student");
-import { uuid } from "./../global/utils";
+import { uuid, responseObj } from "./../global/utils";
 
 exports.studentCreate = function(req, res) {
   let obj = req.body;
   obj.deleted = false;
-  obj.studentId = uuid();
+  obj.studentId = "STU" + uuid();
   obj.userType = "student";
   let student = new StudentDetails(obj);
   student

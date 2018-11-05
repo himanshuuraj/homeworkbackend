@@ -25,48 +25,48 @@ db.on("error", console.error.bind(console, "MongoDB connection error:"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
-app.use((req, res, next) => {
-  var url_parts = url.parse(req.url);
-  if (
-    url_parts.pathname === "/parent/login" ||
-    url_parts.pathname === "/parent/create"
-  ) {
-    return next();
-  }
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  if (req.method === "Options") {
-    res.header("Access-Control-Allow-Methods", "PUT, POST, DELETE");
-    return res.status(200).json({});
-  }
-  var token = req.body.token || req.query.token || req.headers["authorization"];
-  if (token) {
-    token = jwt.verify(token, key, function(err, decoded) {
-      if (err) {
-        return res.status(401).json({
-          success: false,
-          message: "Failed to authenticate token.",
-          err
-        });
-      } else {
-        // if everything is good, save to request for use in other routes
-        req.decoded = decoded;
-        next();
-      }
-    });
-  } else {
-    // if there is no token
-    // return an error
-    return res.status(403).send({
-      success: false,
-      message: "No token provided."
-    });
-  }
-});
+// app.use((req, res, next) => {
+//   var url_parts = url.parse(req.url);
+//   if (
+//     url_parts.pathname === "/parent/login" ||
+//     url_parts.pathname === "/parent/create"
+//   ) {
+//     return next();
+//   }
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//   if (req.method === "Options") {
+//     res.header("Access-Control-Allow-Methods", "PUT, POST, DELETE");
+//     return res.status(200).json({});
+//   }
+//   var token = req.body.token || req.query.token || req.headers["authorization"];
+//   if (token) {
+//     token = jwt.verify(token, key, function(err, decoded) {
+//       if (err) {
+//         return res.status(401).json({
+//           success: false,
+//           message: "Failed to authenticate token.",
+//           err
+//         });
+//       } else {
+//         // if everything is good, save to request for use in other routes
+//         req.decoded = decoded;
+//         next();
+//       }
+//     });
+//   } else {
+//     // if there is no token
+//     // return an error
+//     return res.status(403).send({
+//       success: false,
+//       message: "No token provided."
+//     });
+//   }
+// });
 
 app.use("/parent", parentDetails);
 app.use("/student", studentDetails);

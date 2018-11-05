@@ -2,7 +2,7 @@ var ParentDetails = require("../models/parent");
 var bcrypt = require("bcryptjs");
 import { key } from "./../config/config";
 import { timeToExpireToken } from "./../config/config";
-import { uuid } from "./../global/utils";
+import { uuid, responseObj } from "./../global/utils";
 const jwt = require("jsonwebtoken");
 
 exports.test = function(req, res) {

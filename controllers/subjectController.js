@@ -1,9 +1,9 @@
 var SubjectDetails = require("../models/subject");
-import { uuid } from "../global/utils";
+import { uuid, responseObj } from "../global/utils";
 
 exports.subjectCreate = function(req, res) {
   let obj = req.body;
-  objsubjectId = uuid();
+  objsubjectId = "SUB" + uuid();
   let SubjectDetails = new SubjectDetails(obj);
   SubjectDetails.save()
     .then(subject => {
