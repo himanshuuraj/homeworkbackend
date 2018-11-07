@@ -9,6 +9,7 @@ var teacherDetails = require("./routes/teacherDetails");
 var homeworkDetails = require("./routes/homeworkDetails");
 var classAndSectionDetails = require("./routes/classAndSectionDetails");
 var subjectDetails = require("./routes/subjectDetails");
+var studentHomeworkDetails = require("./routes/studentHomeworkDetails")
 var app = express();
 var jwt = require("jsonwebtoken");
 var url = require("url");
@@ -74,7 +75,7 @@ app.use("/teacher", teacherDetails);
 app.use("/homework", homeworkDetails);
 app.use("/classAndSection", classAndSectionDetails);
 app.use("/subject", subjectDetails);
-
+app.use("/studenthomework", studentHomeworkDetails);
 // default port here
 var port = 8080;
 app.listen(port, () => {

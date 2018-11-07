@@ -13,10 +13,12 @@ router.get("/", (req, res) => {
 
 router.post("/create", classAndSectionController.classAndSectionCreate);
 
+router.get("/getAll", classAndSectionController.classAndSectionGetAll)
+
 router.get("/:id", classAndSectionController.classAndSectionGet);
 
 router.put("/update/:id", classAndSectionController.classAndSectionUpdate);
 
-router.delete("/delete/:id", classAndSectionController.classAndSectionDelete);
+router.delete("/delete/:classAndSectionId", classAndSectionController.classAndSectionDelete);
 
 module.exports = router;

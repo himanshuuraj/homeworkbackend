@@ -7,6 +7,23 @@ exports.test = function(req, res) {
   res.status(404).json({ text: "Not found" });
 };
 
+exports.classAndSectionGetAll = (req, res) => {
+  ClassAndSectionDetails.find({}).sort('classAndSectionName').exec((err, users) => {
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.message = "Error in getting class and section List";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = users;
+      responseObj.message = "Class And Section List";
+      return res.json(responseObj);
+    }
+    res.send(userMap);
+  });
+}
+
 exports.classAndSectionCreate = function(req, res) {
   let obj = Object.assign({},req.body);
   obj.deleted = false;
@@ -76,6 +93,7 @@ exports.classAndSectionUpdate = function(req, res) {
 };
 
 exports.classAndSectionDelete = function(req, res) {
+  console.log(req.params.classAndSectionId, "id", "id");
   ClassAndSectionDetails.findByIdAndRemove(
     req.params.classAndSectionId,
     function(err, classAndSection) {
@@ -89,7 +107,7 @@ exports.classAndSectionDelete = function(req, res) {
         responseObj.success = true;
         responseObj.body = classAndSection;
         responseObj.param = req.params;
-        responseObj.message = "Class And Section deleted successfully";
+        responseObj.message = "Class And Section " + classAndSection.classAndSectionName + " deleted successfully";
         return res.json(responseObj);
       }
     }

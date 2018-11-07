@@ -13,7 +13,6 @@ var StudentSchema = new Schema({
   phone: { type: String, required: false },
   bloodGroup: { type: String, required: false },
   gender: { type: String, required: false },
-  homework: { type: Array, required: false },  // here is the linkage
   userType : { type: String, required: true },
   address: { type: String, required: true },
   deleted: { type: String, required: false }
@@ -21,3 +20,5 @@ var StudentSchema = new Schema({
 
 // Export the model
 module.exports = mongoose.model("StudentDetails", StudentSchema);
+
+// student and homework are related through sectionId and subjectId
