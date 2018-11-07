@@ -1,6 +1,23 @@
 var SubjectDetails = require("../models/subject");
 import { uuid, responseObj } from "../global/utils";
 
+
+exports.subjectGetAll = (req, res) => {
+  SubjectDetails.find({}).sort('subjectName').exec((err, subjects) => {
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.message = "Error in getting Subject List";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = subjects;
+      responseObj.message = "Subjects List";
+      return res.json(responseObj);
+    }
+  });
+}
+
 exports.subjectCreate = function(req, res) {
   let obj = req.body;
   obj.subjectId = "SUB" + uuid();

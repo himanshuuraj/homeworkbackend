@@ -9,10 +9,12 @@ var subjectController = require("../controllers/subjectController");
 
 router.post("/create", subjectController.subjectCreate);
 
+router.get("/getAll", subjectController.subjectGetAll);
+
 router.get("/:id", subjectController.subjectGet);
 
 router.put("/update/:id", subjectController.subjectUpdate);
 
-router.delete("/delete/:id", subjectController.subjectDelete);
+router.delete("/delete/:subjectId", subjectController.subjectDelete);
 
 module.exports = router;
