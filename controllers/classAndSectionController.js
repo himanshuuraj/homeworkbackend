@@ -20,7 +20,6 @@ exports.classAndSectionGetAll = (req, res) => {
       responseObj.message = "Class And Section List";
       return res.json(responseObj);
     }
-    res.send(userMap);
   });
 }
 

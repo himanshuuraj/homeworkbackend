@@ -13,7 +13,7 @@ router.get("/", (req, res) => {
 
 router.post("/create", classAndSectionController.classAndSectionCreate);
 
-router.get("/getAll", classAndSectionController.classAndSectionGetAll)
+router.get("/getAll", classAndSectionController.classAndSectionGetAll);
 
 router.get("/:id", classAndSectionController.classAndSectionGet);
 

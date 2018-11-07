@@ -13,10 +13,13 @@ router.get("/", (req, res) => {
 
 router.post("/create", teacherController.teacherCreate);
 
+router.get("/getAll", teacherController.teacherGetAll);
+
 router.get("/:id", teacherController.teacherGet);
 
-router.put("/:id/update", teacherController.teacherUpdate);
+router.put("update/:id", teacherController.teacherUpdate);
 
-router.delete("/:id/delete", teacherController.teacherDelete);
+router.delete("/delete/:teacherId", teacherController.teacherDelete);
+
 
 module.exports = router;

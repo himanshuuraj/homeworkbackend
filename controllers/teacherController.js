@@ -12,11 +12,29 @@ exports.test = function(req, res) {
   res.status(404).json({ text: "Not found" });
 };
 
+exports.teacherGetAll = (req, res) => {
+  TeacherDetails.find({}).sort('teacherName').exec((err, teachers) => {
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.message = "Error in getting teachers List";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = teachers;
+      responseObj.message = "Teachers List";
+      return res.json(responseObj);
+    }
+  });
+}
+
+
 exports.teacherCreate = function(req, res) {
   let obj = req.body;
   obj.delete = false;
   obj.teacherId = "TEA" + uuid();
   obj.userType = "teacher";
+  obj.teacherName = req.body.name;
   var teacher = new TeacherDetails(obj);
   bcrypt.genSalt(10, (err, salt) =>
     bcrypt.hash(teacher.password, salt, (err, hash) => {
