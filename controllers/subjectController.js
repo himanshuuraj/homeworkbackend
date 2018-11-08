@@ -1,6 +1,7 @@
 var SubjectDetails = require("./../models/subject");
 import { uuid, responseObj } from "./../global/utils";
 import { teacherGetService, teacherUpdateService } from "./teacherController";
+import { classAndSectionUpdateService, classAndSectionGetService } from "./classAndSectionController";
 
 exports.subjectGetAll = (req, res) => {
   SubjectDetails.find({})
@@ -10,13 +11,12 @@ exports.subjectGetAll = (req, res) => {
         responseObj.success = false;
         responseObj.error = err;
         responseObj.message = "Error in getting Subject List";
-        return res.json(responseObj);
       } else {
         responseObj.success = true;
         responseObj.body = subjects;
         responseObj.message = "Subjects List";
-        return res.json(responseObj);
       }
+      return res.json(responseObj);
     });
 };
 
@@ -24,13 +24,23 @@ exports.subjectCreate = async function(req, res) {
   let obj = req.body;
   let responseObj = await subjectCreateService(obj, req.body);
   let resObj = responseObj.body;
+
   let teacher = await teacherGetService(obj.teacherId, {});
   teacher = teacher.body;
   teacher.subjects.push({
       subjectId : resObj._id,
       subjectName : resObj.subjectName
   });
-  let ress = await teacherUpdateService(obj.teacherId, teacher, {});
+  await teacherUpdateService(obj.teacherId, teacher, {});
+
+  let classAndSection = await classAndSectionGetService(resObj.classAndSectionId, null);
+  classAndSection = classAndSection.body;
+  classAndSection.subjects.push({
+      subjectId : resObj._id,
+      subjectName : resObj.subjectName
+  });
+  await classAndSectionUpdateService(resObj.classAndSectionId, classAndSection, {});
+
   return res.json(responseObj);
 };
 

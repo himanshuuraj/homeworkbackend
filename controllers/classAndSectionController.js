@@ -49,47 +49,14 @@ exports.classAndSectionCreate = function(req, res) {
     });
 };
 
-exports.classAndSectionGet = function(req, res) {
-  ClassAndSectionDetails.findById(req.params.classAndSectionId, function(
-    err,
-    classAndSection
-  ) {
-    if (err) {
-      responseObj.success = false;
-      responseObj.error = err;
-      responseObj.param = req.params;
-      responseObj.message = "Error in getting class and section";
-      return res.json(responseObj);
-    } else {
-      responseObj.success = true;
-      responseObj.body = classAndSection;
-      responseObj.param = req.params;
-      responseObj.message = "Class And Section Data";
-      return res.json(responseObj);
-    }
-  });
+exports.classAndSectionGet = async function(req, res) {
+    let obj = await classAndSectionGetService(req.params.classAndSectionId, req.params);
+    return res.json(obj);
 };
 
-exports.classAndSectionUpdate = function(req, res) {
-  ClassAndSectionDetails.findByIdAndUpdate(
-    req.params.classAndSectionId,
-    { $set: obj },
-    function(err, classAndSection) {
-      if (err) {
-        responseObj.success = false;
-        responseObj.error = err;
-        responseObj.param = req.params;
-        responseObj.message = "Error in updating class and section";
-        return res.json(responseObj);
-      } else {
-        responseObj.success = true;
-        responseObj.body = classAndSection;
-        responseObj.param = req.params;
-        responseObj.message = "Class And Section updated successfully";
-        return res.json(responseObj);
-      }
-    }
-  );
+exports.classAndSectionUpdate = async function(req, res) {
+  let obj = await classAndSectionUpdateService(req.params.classAndSectionId, req.body, null);
+  return res.json(obj);
 };
 
 exports.classAndSectionDelete = function(req, res) {
@@ -115,4 +82,47 @@ exports.classAndSectionDelete = function(req, res) {
       }
     }
   );
+};
+
+export let classAndSectionUpdateService = async function(id, obj, param) {
+  return new Promise(function(resolve, reject) {
+    ClassAndSectionDetails.findByIdAndUpdate(
+      id,
+      { $set: obj },
+      function(err, classAndSection) {
+        if (err) {
+          responseObj.success = false;
+          responseObj.error = err;
+          responseObj.message = "Error in updating class and section";
+        } else {
+          responseObj.success = true;
+          responseObj.body = classAndSection;
+          responseObj.message = "Class And Section updated successfully";
+        }
+        responseObj.param = param;
+        resolve(responseObj);
+      }
+    );
+  });
+};
+
+export let classAndSectionGetService = function(id, param) {
+  return new Promise(function(resolve, reject) {
+    ClassAndSectionDetails.findById(id, function(
+      err,
+      classAndSection
+    ) {
+      if (err) {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.message = "Error in getting class and section";
+      } else {
+        responseObj.success = true;
+        responseObj.body = classAndSection;
+        responseObj.message = "Class And Section Data";
+      }
+      responseObj.param = param;
+      resolve(responseObj);
+    });
+  });
 };
