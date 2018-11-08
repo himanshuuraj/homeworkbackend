@@ -5,34 +5,33 @@ import { timeToExpireToken } from "./../config/config";
 const jwt = require("jsonwebtoken");
 import { uuid, responseObj } from "../global/utils";
 
-
 //Simple version, without validation or sanitation
 exports.test = function(req, res) {
-  //res.send("Greetings from the Test controller!");
   res.status(404).json({ text: "Not found" });
 };
 
 exports.teacherGetAll = (req, res) => {
-  TeacherDetails.find({}).sort('teacherName').exec((err, teachers) => {
-    if (err) {
-      responseObj.success = false;
-      responseObj.error = err;
-      responseObj.message = "Error in getting teachers List";
-      return res.json(responseObj);
-    } else {
-      responseObj.success = true;
-      responseObj.body = teachers;
-      responseObj.message = "Teachers List";
-      return res.json(responseObj);
-    }
-  });
-}
-
+  TeacherDetails.find({})
+    .sort("teacherName")
+    .exec((err, teachers) => {
+      if (err) {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.message = "Error in getting teachers List";
+        return res.json(responseObj);
+      } else {
+        responseObj.success = true;
+        responseObj.body = teachers;
+        responseObj.message = "Teachers List";
+        return res.json(responseObj);
+      }
+    });
+};
 
 exports.teacherCreate = function(req, res) {
   let obj = req.body;
   obj.delete = false;
-  obj.teacherId = "TEA" + uuid();
+  //  obj.teacherId = "TEA" + uuid();
   obj.userType = "teacher";
   obj.teacherName = req.body.name;
   var teacher = new TeacherDetails(obj);
@@ -62,72 +61,26 @@ exports.teacherCreate = function(req, res) {
   );
 };
 
-exports.teacherGet = function(req, res) {
-  TeacherDetails.findById(req.params.teacherId, function(err, teacher) {
-    if (err) {
-      responseObj.success = false;
-      responseObj.error = err;
-      responseObj.param = req.params;
-      responseObj.message = "Error in getting teacher data";
-      return res.json(responseObj);
-    } else {
-      responseObj.success = true;
-      responseObj.body = teacher;
-      responseObj.param = req.params;
-      responseObj.message = "Teacher Data";
-      return res.json(responseObj);
-    }
-  });
+exports.teacherGet = async function(req, res) {
+  let obj = await teacherGetService(req.params.teacherId, req.params);
+  return res.json(obj);
 };
 
-exports.teacherUpdate = function(req, res) {
+exports.teacherUpdate = async function(req, res) {
+  let obj = req.body;
+  let id = req.params.teacherId;
   if (req.body.password) {
     bcrypt.genSalt(10, (err, salt) =>
-      bcrypt.hash(req.body.password, salt, (err, hash) => {
+      bcrypt.hash(req.body.password, salt, async function(err, hash) {
         if (err) throw err;
-        let obj = req.body;
         obj.password = hash;
-        TeacherDetails.findByIdAndUpdate(
-          req.params.teacherId,
-          { $set: obj },
-          function(err, teacher) {
-            if (err) {
-              responseObj.success = false;
-              responseObj.error = err;
-              responseObj.param = req.params;
-              responseObj.message = "Error in updating teacher";
-              return res.json(responseObj);
-            } else {
-              responseObj.success = true;
-              responseObj.body = teacher;
-              responseObj.param = req.params;
-              responseObj.message = "Teacher updated successfully";
-              return res.json(responseObj);
-            }
-          }
-        );
+        let resObj = await teacherUpdateService(id, obj, req.params);
+        return res.json(resObj);
       })
     );
   } else {
-    TeacherDetails.findByIdAndUpdate(
-      req.params.teacherId,
-      { $set: obj },
-      function(err, teacher) {
-        if (err) {
-          responseObj.success = false;
-          responseObj.error = err;
-          responseObj.param = req.params;
-          responseObj.message = "Error in updating teacher";
-          return res.json(responseObj);
-        } else {
-          responseObj.success = true;
-          responseObj.body = teacher;
-          responseObj.param = req.params;
-          responseObj.message = "Teacher updated successfully";
-          return res.json(responseObj);
-        }
-      }
-    );
+    let resObj = await teacherUpdateService(id, obj, req.params);
+    return res.json(resObj);
   }
 };
 
@@ -210,5 +163,41 @@ export let teacherLogin = (req, res) => {
         }
       });
     }
+  });
+};
+
+export let teacherUpdateService = function(id, obj, param) {
+  return new Promise(function(resolve, reject) {
+    TeacherDetails.findByIdAndUpdate(id, { $set: obj }, function(err, teacher) {
+      if (err) {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.message = "Error in updating teacher";
+      } else {
+        responseObj.success = true;
+        responseObj.body = teacher;
+        responseObj.message = "Teacher updated successfully";
+      }
+      responseObj.param = param;
+      resolve(responseObj);
+    });
+  });
+};
+
+export let teacherGetService = function(id, param) {
+  return new Promise(function(resolve, reject) {
+    TeacherDetails.findById(id, function(err, teacher) {
+      if (err) {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.message = "Error in getting teacher data";
+      } else {
+        responseObj.success = true;
+        responseObj.body = teacher;
+        responseObj.message = "Teacher Data";
+      }
+      responseObj.param = param;
+      resolve(responseObj);
+    });
   });
 };

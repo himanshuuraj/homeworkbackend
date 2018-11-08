@@ -2,7 +2,6 @@ var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var StudentAndHomeworkSchema = new Schema({
-  studentId: { type: String, required: true },
   studentName: { type: String, required: true },
   subjectId: { type: String, required: true },
   subjectName: { type: String, required: true },

@@ -15,11 +15,10 @@ router.post("/create", teacherController.teacherCreate);
 
 router.get("/getAll", teacherController.teacherGetAll);
 
-router.get("/:id", teacherController.teacherGet);
+router.get("/get/:teacherId", teacherController.teacherGet);
 
 router.put("update/:id", teacherController.teacherUpdate);
 
 router.delete("/delete/:teacherId", teacherController.teacherDelete);
-
 
 module.exports = router;

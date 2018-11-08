@@ -3,7 +3,6 @@ var Schema = mongoose.Schema;
 
 var TeacherSchema = new Schema({
   teacherName: { type: String, required: true },
-  teacherId: { type: String, required: true },
   subjects: { type: Array, required: false },
   email: { type: String, required: true },
   dob: { type: Number, required: false },
@@ -11,7 +10,7 @@ var TeacherSchema = new Schema({
   gender: { type: String, required: false },
   password: { type: String, required: true },
   deleted: { type: String, required: false },
-  userType : { type: String, required: true },
+  userType: { type: String, required: true },
   address: { type: String, required: true }
 });
 

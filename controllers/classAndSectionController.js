@@ -8,25 +8,26 @@ exports.test = function(req, res) {
 };
 
 exports.classAndSectionGetAll = (req, res) => {
-  ClassAndSectionDetails.find({}).sort('classAndSectionName').exec((err, users) => {
-    if (err) {
-      responseObj.success = false;
-      responseObj.error = err;
-      responseObj.message = "Error in getting class and section List";
-      return res.json(responseObj);
-    } else {
-      responseObj.success = true;
-      responseObj.body = users;
-      responseObj.message = "Class And Section List";
-      return res.json(responseObj);
-    }
-  });
-}
+  ClassAndSectionDetails.find({})
+    .sort("classAndSectionName")
+    .exec((err, users) => {
+      if (err) {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.message = "Error in getting class and section List";
+        return res.json(responseObj);
+      } else {
+        responseObj.success = true;
+        responseObj.body = users;
+        responseObj.message = "Class And Section List";
+        return res.json(responseObj);
+      }
+    });
+};
 
 exports.classAndSectionCreate = function(req, res) {
-  let obj = Object.assign({},req.body);
+  let obj = Object.assign({}, req.body);
   obj.deleted = false;
-  obj.classAndSectionId = "CS" + uuid();
   obj.subjects = [];
   console.log(obj);
   let classAndSection = new ClassAndSectionDetails(obj);
@@ -106,7 +107,10 @@ exports.classAndSectionDelete = function(req, res) {
         responseObj.success = true;
         responseObj.body = classAndSection;
         responseObj.param = req.params;
-        responseObj.message = "Class And Section " + classAndSection.classAndSectionName + " deleted successfully";
+        responseObj.message =
+          "Class And Section " +
+          classAndSection.classAndSectionName +
+          " deleted successfully";
         return res.json(responseObj);
       }
     }

@@ -1,42 +1,37 @@
-var SubjectDetails = require("../models/subject");
-import { uuid, responseObj } from "../global/utils";
-
+var SubjectDetails = require("./../models/subject");
+import { uuid, responseObj } from "./../global/utils";
+import { teacherGetService, teacherUpdateService } from "./teacherController";
 
 exports.subjectGetAll = (req, res) => {
-  SubjectDetails.find({}).sort('subjectName').exec((err, subjects) => {
-    if (err) {
-      responseObj.success = false;
-      responseObj.error = err;
-      responseObj.message = "Error in getting Subject List";
-      return res.json(responseObj);
-    } else {
-      responseObj.success = true;
-      responseObj.body = subjects;
-      responseObj.message = "Subjects List";
-      return res.json(responseObj);
-    }
-  });
-}
-
-exports.subjectCreate = function(req, res) {
-  let obj = req.body;
-  obj.subjectId = "SUB" + uuid();
-  let subject = new SubjectDetails(obj);
-  subject.save()
-    .then(subject => {
-      responseObj.success = true;
-      responseObj.body = subject;
-      responseObj.param = req.body;
-      responseObj.message = "Subject Created Successfully";
-      return res.json(responseObj);
-    })
-    .catch(err => {
-      responseObj.success = false;
-      responseObj.error = err;
-      responseObj.param = req.body;
-      responseObj.message = "Error in creating subject";
-      return res.json(responseObj);
+  SubjectDetails.find({})
+    .sort("subjectName")
+    .exec((err, subjects) => {
+      if (err) {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.message = "Error in getting Subject List";
+        return res.json(responseObj);
+      } else {
+        responseObj.success = true;
+        responseObj.body = subjects;
+        responseObj.message = "Subjects List";
+        return res.json(responseObj);
+      }
     });
+};
+
+exports.subjectCreate = async function(req, res) {
+  let obj = req.body;
+  let responseObj = await subjectCreateService(obj, req.body);
+  let resObj = responseObj.body;
+  let teacher = await teacherGetService(obj.teacherId, {});
+  teacher = teacher.body;
+  teacher.subjects.push({
+      subjectId : resObj._id,
+      subjectName : resObj.subjectName
+  });
+  let ress = await teacherUpdateService(obj.teacherId, teacher, {});
+  return res.json(responseObj);
 };
 
 exports.subjectGet = function(req, res) {
@@ -98,5 +93,27 @@ exports.subjectDelete = function(req, res) {
       responseObj.message = "Student deleted successfully";
       return res.json(responseObj);
     }
+  });
+};
+
+export let subjectCreateService = (obj, param) => {
+  return new Promise(function(resolve, reject) {
+    let subject = new SubjectDetails(obj);
+    subject
+      .save()
+      .then(subject => {
+        responseObj.success = true;
+        responseObj.body = subject;
+        responseObj.param = param;
+        responseObj.message = "Subject Created Successfully";
+        resolve(responseObj);
+      })
+      .catch(err => {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.param = param;
+        responseObj.message = "Error in creating subject";
+        resolve(responseObj);
+      });
   });
 };

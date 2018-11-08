@@ -9,8 +9,7 @@ var ParentSchema = new Schema({
   password: { type: String, required: true },
   student: { type: Array, required: true },
   address: { type: String, required: true },
-  id: { type: String, required: true },
-  userType : { type: String, required: true },
+  userType: { type: String, required: true },
   deleted: { type: String, required: true }
 });
 
