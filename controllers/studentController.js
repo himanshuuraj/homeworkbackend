@@ -66,7 +66,7 @@ exports.studentUpdate = function(req, res) {
   );
 };
 
-exports.studentDelete = function(req, res) {
+exports.studentDelete = (req, res) => {
   StudentDetails.findByIdAndRemove(req.params.studentId, function(
     err,
     student
@@ -86,3 +86,20 @@ exports.studentDelete = function(req, res) {
     }
   });
 };
+
+exports.getStudentOfClassAndSection = (req, res) => {
+  let classAndSectionId = req.params.classAndSectionId;
+  StudentDetails.find({classAndSectionId : classAndSectionId})
+    .exec((err, students) => {
+      if (err) {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.message = "Error in getting students List";
+      } else {
+        responseObj.success = true;
+        responseObj.body = students;
+        responseObj.message = "Students List";
+      }
+      return res.json(responseObj);
+    });
+}

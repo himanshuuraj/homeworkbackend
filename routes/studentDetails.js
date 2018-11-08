@@ -13,7 +13,9 @@ router.get("/", (req, res) => {
 
 router.post("/create", studentController.studentCreate);
 
-router.get("/:id", studentController.studentGet);
+router.get("/get/:studentId", studentController.studentGet);
+
+router.get("/getStudentOfClassAndSection/:classAndSectionId", studentController.getStudentOfClassAndSection);
 
 router.put("/update/:id", studentController.studentUpdate);
 
