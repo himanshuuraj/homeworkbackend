@@ -106,8 +106,8 @@ exports.teacherDelete = function(req, res) {
 };
 
 export let teacherLogin = (req, res) => {
-  let email = req.query.email;
-  let password = req.query.password;
+  let email = req.body.email;
+  let password = req.body.password;
   if (!email) {
     responseObj.param = req.body;
     responseObj.message = "Please insert email";
@@ -135,25 +135,41 @@ export let teacherLogin = (req, res) => {
       }
       bcrypt.compare(password, teacher.password, function(err, result) {
         console.log(result);
-        if (result == true) {
-          const payload = {
-            email: user.email,
-            name: user.name,
-            phone: user.phone
-          };
-          jwt.sign(
-            payload,
-            key,
-            { expiresIn: timeToExpireToken },
-            (err, token) => {
-              responseObj.success = true;
-              responseObj.body = parent;
-              responseObj.param = req.body;
-              responseObj.message = "login successful";
-              responseObj.token = "Bearer " + token;
-              return res.json(responseObj);
-            }
-          );
+        if (result === true) {
+          responseObj.success = true;
+          responseObj.body = teacher;
+          responseObj.param = req.body;
+          responseObj.message = "login successful";
+          // responseObj.token = "Bearer " + token;
+          return res.status(200).json(responseObj);
+          // const payload = {
+          //   email: teacher.email,
+          //   name: teacher.name,
+          //   phone: teacher.phone
+          // };
+          // jwt.sign(
+          //   payload,
+          //   key,
+          //   { expiresIn: timeToExpireToken },
+          //   (err, token) => {
+          //     if(err){
+          //       console.log(1);
+          //       responseObj.success = false;
+          //       responseObj.error = err;
+          //       responseObj.param = req.body;
+          //       responseObj.message = "login unsuccessful";
+          //       return res.json(responseObj);
+          //     }else{
+          //       console.log(2, token);
+          //       responseObj.success = true;
+          //       responseObj.body = parent;
+          //       responseObj.param = req.body;
+          //       responseObj.message = "login successful";
+          //       responseObj.token = "Bearer " + token;
+          //       return res.status(200).json(responseObj);
+          //     }
+          //   }
+          // );
         } else {
           responseObj.success = false;
           responseObj.body = parent;

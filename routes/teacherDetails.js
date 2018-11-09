@@ -17,8 +17,9 @@ router.get("/getAll", teacherController.teacherGetAll);
 
 router.get("/get/:teacherId", teacherController.teacherGet);
 
-router.put("update/:id", teacherController.teacherUpdate);
+router.put("/update/:teacherId", teacherController.teacherUpdate);
 
 router.delete("/delete/:teacherId", teacherController.teacherDelete);
 
+router.post("/login", teacherController.teacherLogin);
 module.exports = router;
