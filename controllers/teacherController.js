@@ -41,11 +41,11 @@ exports.teacherCreate = function(req, res) {
       teacher.password = hash;
       teacher
         .save()
-        .then(teacher => {
+        .then(teach => {
           delete teacher.password;
-          delete teacher._id;
+          //delete teacher._id;
           responseObj.success = true;
-          responseObj.body = teacher;
+          responseObj.body = teach;
           responseObj.param = req.body;
           responseObj.message = "Teacher Created Successfully";
           return res.json(responseObj);

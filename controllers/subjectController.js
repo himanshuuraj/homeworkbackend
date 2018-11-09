@@ -3,6 +3,22 @@ import { uuid, responseObj } from "./../global/utils";
 import { teacherGetService, teacherUpdateService } from "./teacherController";
 import { classAndSectionUpdateService, classAndSectionGetService } from "./classAndSectionController";
 
+exports.teacherGetAll = (req, res) => {
+  SubjectDetails.find({ teacherId : req.params.teacherId})
+    .exec((err, subjects) => {
+      if (err) {
+        responseObj.success = false;
+        responseObj.error = err;
+        responseObj.message = "Error in getting Subject List";
+      } else {
+        responseObj.success = true;
+        responseObj.body = subjects;
+        responseObj.message = "Subjects List";
+      }
+      return res.json(responseObj);
+    });
+}
+
 exports.subjectGetAll = (req, res) => {
   SubjectDetails.find({})
     .sort("subjectName")

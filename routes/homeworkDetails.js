@@ -13,6 +13,8 @@ router.get("/:id", homeworkController.homeworkGet);
 
 router.put("/update/:id", homeworkController.homeworkUpdate);
 
-router.delete("/delete/:id", homeworkController.homeworkDelete);
+router.delete("/delete/:homeworkId", homeworkController.homeworkDelete);
+
+router.get("/get/teacher/:teacherId", homeworkController.homeworkGetByTeacher);
 
 module.exports = router;

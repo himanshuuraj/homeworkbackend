@@ -1,6 +1,25 @@
 var HomeworkDetails = require("../models/homework");
 import { uuid, responseObj } from "../global/utils";
 
+exports.homeworkGetByTeacher = (req, res) => {
+  let teacherId = req.params.teacherId;
+  HomeworkDetails.find({teacherId : teacherId}, function(err, homeworks) {
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.params;
+      responseObj.message = "Error in getting homeworks";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = homeworks;
+      responseObj.param = req.params;
+      responseObj.message = "Homeworks data";
+      return res.json(responseObj);
+    }
+  });
+}
+
 exports.homeworkCreate = function(req, res) {
   let obj = req.body;
   obj.homeworkId = "HW" + uuid();

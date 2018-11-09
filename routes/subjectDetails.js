@@ -13,6 +13,8 @@ router.get("/getAll", subjectController.subjectGetAll);
 
 router.get("/:id", subjectController.subjectGet);
 
+router.get("/teacher/:teacherId", subjectController.teacherGetAll);
+
 router.put("/update/:id", subjectController.subjectUpdate);
 
 router.delete("/delete/:subjectId", subjectController.subjectDelete);
