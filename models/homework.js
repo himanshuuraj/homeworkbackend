@@ -10,7 +10,9 @@ var HomeworkSchema = new Schema({
   homeworkId: { type: String, required: true },
   createdAt: { type: Number, required: true },
   lastDateToSubmit: { type: Number, required: true },
-  deleted: { type: String, required: true }
+  deleted: { type: String, required: true },
+  classAndSectionId: { type: String, required: true },
+  classAndSectionName: { type: String, required: true },
 });
 
 // Export the model

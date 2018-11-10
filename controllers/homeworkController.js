@@ -20,6 +20,25 @@ exports.homeworkGetByTeacher = (req, res) => {
   });
 }
 
+exports.homeworkListByClassAndSection = (req, res)  => {
+  let classAndSectionId = req.params.classAndSectionId;
+  HomeworkDetails.find({classAndSectionId : classAndSectionId}, function(err, homeworks) {
+    if (err) {
+      responseObj.success = false;
+      responseObj.error = err;
+      responseObj.param = req.params;
+      responseObj.message = "Error in getting homeworks";
+      return res.json(responseObj);
+    } else {
+      responseObj.success = true;
+      responseObj.body = homeworks;
+      responseObj.param = req.params;
+      responseObj.message = "Homeworks list";
+      return res.json(responseObj);
+    }
+  });
+}
+
 exports.homeworkCreate = function(req, res) {
   let obj = req.body;
   obj.homeworkId = "HW" + uuid();

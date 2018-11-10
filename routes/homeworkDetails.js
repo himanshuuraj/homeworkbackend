@@ -17,4 +17,6 @@ router.delete("/delete/:homeworkId", homeworkController.homeworkDelete);
 
 router.get("/get/teacher/:teacherId", homeworkController.homeworkGetByTeacher);
 
+router.get("/classAndSectionId/:classAndSectionId", homeworkController.homeworkListByClassAndSection);
+
 module.exports = router;
